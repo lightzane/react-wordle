@@ -1,0 +1,19 @@
+.box {
+    border: 2px solid #b2bec3;
+    border-radius: .3rem;
+
+    margin: .2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 3rem;
+    height: 3rem;
+
+    font-family: 'Space Mono', monospace;
+    font-size: 1.7rem;
+    font-weight: bold;
+
+    transition: 250ms ease-in;
+}

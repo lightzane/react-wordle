@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +12,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+$common: #636e72;
+$green: #00b894;
+$yellow: #fdcb6e;
+
+.letter {
+  color: #fff;
+  background-color: $common;
+  border-color: $common !important;
+}
+
+.green {
+  background-color: $green !important;
+  border-color: $green !important;
+  color: #fff;
+}
+
+.yellow {
+  color: black;
+  background-color: $yellow !important;
+  border-color: $yellow !important;
 }

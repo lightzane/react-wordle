@@ -9,5 +9,10 @@ export const WORDS = [
     'beach',
     'birth',
     'block',
-    'blood'
+    'blood',
+    'board',
+    'brain',
+    'bread',
+    'break',
+    'brown'
 ];

@@ -2,6 +2,7 @@ import React, { KeyboardEvent, useCallback, useContext, useEffect, useState } fr
 import './App.scss';
 import { Board } from './components/board/board';
 import { Header } from './components/header/header';
+import { Keyboard } from './components/keyboard';
 import { GlobalContext } from './state/global.context';
 
 export const App: React.FC = () => {
@@ -58,6 +59,7 @@ export const App: React.FC = () => {
       <Header isModalCustomWordOpened={handleModalCustomWordOpened} />
       {/* <span className="font-space">{globalCtx?.currentWord?.replace(/./gi, '*')}</span> */}
       <Board />
+      <Keyboard />
     </div>
   );
 

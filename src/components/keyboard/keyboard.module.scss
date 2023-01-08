@@ -1,0 +1,22 @@
+.key {
+    background-color: #dfe6e9;
+    padding: .5rem .7rem;
+    margin: .2rem;
+    border-radius: .3rem;
+    cursor: pointer;
+    transition: 250ms ease-in;
+    &:hover {
+        background-color: #b2bec3;
+    }
+}
+
+.keyboard_row {
+    display: flex;
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+
+    // handset
+    @media screen and (max-width: 599.98px) and (orientation: portrait) {
+        font-size: 0.8rem;
+    }
+}

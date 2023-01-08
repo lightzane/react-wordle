@@ -70,6 +70,7 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
         btnCancel.current?.click();
 
         globalCtx?.incrementGameRound();
+        globalCtx?.setStrict(false);
     }
 
     function randomWord(): void {
@@ -87,6 +88,7 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
             inputCustomWord.current.value = '';
         }
         globalCtx?.incrementGameRound();
+        globalCtx?.setStrict(true);
     }
 
     /** Consume the item in the array */

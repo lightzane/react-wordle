@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { WORDS } from "../../shared/words";
 import { GlobalContext } from "../../state/global.context";
 import { Box } from "../box/box";
 import style from './board.module.scss';
@@ -54,7 +55,18 @@ export const Board: React.FC = () => {
 
     /** Validate answer and clean up used boxes */
     const validateAnswer = useCallback(() => {
-        if (!currentWord || submittedLetters.length === 0) return;
+        if (!currentWord || submittedLetters.length === 0 || globalCtx?.currentLetter !== 'ENTER') return;
+
+        globalCtx.enterLetter(null);
+
+        const submittedAnswer = submittedLetters.join('');
+
+        if (globalCtx?.strict && !WORDS.includes(submittedAnswer.toLowerCase())) {
+            alert('Word not in list!');
+            return;
+        }
+
+        globalCtx?.setCurrentBox(0);
 
         /** Can be used as indicator if all letters are correct */
         let correctLetters = 0;
@@ -98,7 +110,7 @@ export const Board: React.FC = () => {
             setAttempts(currentValue => currentValue + 1);
         }
 
-    }, [currentWord, submittedLetters, attempts]);
+    }, [currentWord, submittedLetters, attempts, globalCtx]);
 
     useEffect(() => {
         if (!currentWord?.length || gameOver) return;
@@ -125,7 +137,6 @@ export const Board: React.FC = () => {
 
             // * Enter and Submit the word
             else if (currentLetter === 'ENTER' && globalCtx.currentBox !== 0) {
-                globalCtx.setCurrentBox(0);
                 validateAnswer();
             }
 

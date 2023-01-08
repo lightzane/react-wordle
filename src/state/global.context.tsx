@@ -18,8 +18,13 @@ export interface GlobalContextType {
     currentLetter: string | null;
     enterLetter: (value: string | null) => void;
 
+    /** Just for state handling and retriggering for react `useEffect` and resets the game */
     gameRound: number;
     incrementGameRound: () => void;
+
+    /** Restricts words that are not in the list */
+    strict: boolean;
+    setStrict: (value: boolean) => void;
 }
 
 export const GlobalContext = createContext<GlobalContextType | null>(null);
@@ -33,6 +38,8 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode; }> = ({ child
     const [currentLetter, setCurrentLetter] = useState<string | null>(null);
 
     const [gameRound, setGameRound] = useState(1);
+
+    const [strict, setStrict] = useState(true);
 
     useEffect(() => {
         setCurrentWord(null);
@@ -76,7 +83,9 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode; }> = ({ child
         currentLetter,
         enterLetter: setCurrentLetter,
         gameRound,
-        incrementGameRound
+        incrementGameRound,
+        strict,
+        setStrict
     };
 
     return (

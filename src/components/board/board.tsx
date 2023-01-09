@@ -81,29 +81,39 @@ export const Board: React.FC = () => {
 
         let stats = '';
 
+        const greenLetters: string[] = [];
+        const yellowLetters: string[] = [];
+        const wrongLetters: string[] = [];
+
         currentWord.forEach((v, i) => {
             // * Correct Letter on Position
             if (submittedLetters[i] === v) {
                 boxRefs.current[i].classList.add('green');
                 correctLetters++;
                 stats += '🟩';
+                greenLetters.push(submittedLetters[i]);
             }
 
             // * Letter exist but incorrect position
             else if (currentWord.includes(submittedLetters[i])) {
                 boxRefs.current[i].classList.add('yellow');
                 stats += '🟨';
+                yellowLetters.push(submittedLetters[i]);
             }
 
             // * Letter does not exist
             else {
                 boxRefs.current[i].classList.add('letter');
                 stats += '⬛';
+                wrongLetters.push(submittedLetters[i]);
             }
         });
 
         setSubmittedWords((currentValue) => currentValue.concat(`${stats} ${submittedAnswer}`));
         setStatsOnly((currentValue) => currentValue.concat(stats));
+        globalCtx.setGreenLetters(greenLetters);
+        globalCtx.setYellowLetters(yellowLetters);
+        globalCtx.setWrongLetters(wrongLetters);
 
         // Clean up used boxes
         const usedBoxes = boxRefs.current.splice(0, currentWord.length);
@@ -183,6 +193,10 @@ export const Board: React.FC = () => {
         globalCtx.enterLetter(null);
         // reset game
         setGameOver(false);
+        // reset letter containers for keyboard highlighting
+        globalCtx.clearGreenLetters();
+        globalCtx.clearYellowLetters();
+        globalCtx.clearWrongLetters();
         // eslint-disable-next-line
     }, [globalCtx?.gameRound]);
 

@@ -1,13 +1,31 @@
+$common: #636e72;
+$green: #00b894;
+$yellow: #fdcb6e;
+
 .key {
     background-color: #dfe6e9;
     padding: .5rem .7rem;
     margin: .2rem;
     border-radius: .3rem;
     cursor: pointer;
-    transition: 250ms ease-in;
+    transition: 250ms ease-out;
     &:hover {
         background-color: #b2bec3;
     }
+}
+
+.key.green {
+    background-color: $green !important;
+    color: #fff !important;
+}
+
+.key.yellow {
+    background-color: $yellow;
+}
+
+.key.wrong {
+    background-color: $common;
+    color: #fff;
 }
 
 .keyboard_row {

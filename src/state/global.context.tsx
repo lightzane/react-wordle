@@ -25,6 +25,21 @@ export interface GlobalContextType {
     /** Restricts words that are not in the list */
     strict: boolean;
     setStrict: (value: boolean) => void;
+
+    /** Used as a list for `incorrect` letters to highlight them on the keyboard */
+    yellowLetters: string[];
+    setYellowLetters: (value: string[]) => void;
+    clearYellowLetters: () => void;
+
+    /** Used as a list for `correct` letters to highlight them on the keyboard */
+    greenLetters: string[];
+    setGreenLetters: (value: string[]) => void;
+    clearGreenLetters: () => void;
+
+    /** Used as a list for letters not included in the list to highlight them on the keyboard */
+    wrongLetters: string[];
+    setWrongLetters: (value: string[]) => void;
+    clearWrongLetters: () => void;
 }
 
 export const GlobalContext = createContext<GlobalContextType | null>(null);
@@ -40,6 +55,15 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode; }> = ({ child
     const [gameRound, setGameRound] = useState(1);
 
     const [strict, setStrict] = useState(true);
+
+    /** Used as a list for `incorrect` letters to highlight them on the keyboard */
+    const [yellowLetters, setYellowLetters] = useState<string[]>([]);
+
+    /** Used as a list for `correct` letters to highlight them on the keyboard */
+    const [greenLetters, setGreenLetters] = useState<string[]>([]);
+
+    /** Used as a list for letters not included in the list to highlight them on the keyboard */
+    const [wrongLetters, setWrongLetters] = useState<string[]>([]);
 
     useEffect(() => {
         setCurrentWord(null);
@@ -73,6 +97,42 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode; }> = ({ child
         setGameRound(currentValue => currentValue + 1);
     }
 
+    function updateGreenLetters(letters: string[]): void {
+        for (const letter of letters) {
+            if (!greenLetters.includes(letter)) {
+                setGreenLetters(v => v.concat(letter));
+            }
+        }
+    }
+
+    function updateYellowLetters(letters: string[]): void {
+        for (const letter of letters) {
+            if (!yellowLetters.includes(letter)) {
+                setYellowLetters(v => v.concat(letter));
+            }
+        }
+    }
+
+    function updateWrongsLetters(letters: string[]): void {
+        for (const letter of letters) {
+            if (!wrongLetters.includes(letter)) {
+                setWrongLetters(v => v.concat(letter));
+            }
+        }
+    }
+
+    function clearGreenLetters(): void {
+        setGreenLetters([]);
+    }
+
+    function clearYellowLetters(): void {
+        setYellowLetters([]);
+    }
+
+    function clearWrongLetters(): void {
+        setWrongLetters([]);
+    }
+
     const context: GlobalContextType = {
         currentWord,
         setCurrentWord: cleanUpWord,
@@ -85,7 +145,16 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode; }> = ({ child
         gameRound,
         incrementGameRound,
         strict,
-        setStrict
+        setStrict,
+        yellowLetters,
+        setYellowLetters: updateYellowLetters,
+        clearYellowLetters,
+        greenLetters,
+        setGreenLetters: updateGreenLetters,
+        clearGreenLetters,
+        wrongLetters,
+        setWrongLetters: updateWrongsLetters,
+        clearWrongLetters
     };
 
     return (

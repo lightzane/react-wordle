@@ -1,6 +1,7 @@
 import React, { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
 import { WORDS } from "../../shared/words";
 import { GlobalContext } from "../../state/global.context";
+import { HowToPlay } from "../how-to-play";
 import style from './header.module.scss';
 
 interface Props {
@@ -24,9 +25,7 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
 
     const btnCancel = useRef<HTMLButtonElement>(null);
 
-    const btnCustomWord = useRef<HTMLButtonElement>(null);
-
-    const btnPlay = useRef<HTMLButtonElement>(null);
+    const btnCustomWord = useRef<HTMLDivElement>(null);
 
     const modal = useRef<HTMLDivElement>(null);
 
@@ -76,8 +75,6 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
     function randomWord(): void {
         setTimeout(() => { btnCustomWord.current?.blur(); });
 
-        btnPlay.current?.blur();
-
         const word = loadWord();
 
         // Set Custom Word
@@ -111,6 +108,10 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
         return result;
     }
 
+    function handleCheckboxStrict(): void {
+        globalCtx?.setStrict(!globalCtx.strict);
+    }
+
     // Custom method to be called only once regardless of deps
     useConstructor(() => {
         // Set Custom Word
@@ -124,19 +125,17 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
     // * ==============================================================
     return <>
 
-        <div className="d-flex justify-content-between w-100">
+        <div className="d-flex justify-content-center w-100">
 
-            <button
-                className={`btn btn-outline-primary`}
+            <div
+                className={style.main + ' text-primary'}
                 data-bs-toggle="modal"
                 data-bs-target="#modalAddCustomWord"
                 onClick={handleFocus}
                 ref={btnCustomWord}
             >
-                Custom Word
-            </button>
-
-            <button onClick={randomWord} ref={btnPlay} className='btn btn-outline-success'>Play</button>
+                <i className='bi bi-info-circle'></i>
+            </div>
 
         </div>
 
@@ -149,13 +148,26 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
                     </div>
                     <div className="modal-body">
                         <form className="form-floating" onSubmit={(event) => { submitWord(event); }}>
-                            <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Enter word here" maxLength={10} />
-                            <label htmlFor="customWord">Enter word here</label>
+                            {/* <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Enter word here" maxLength={10} />
+                            <label htmlFor="customWord">Enter word to guess here</label> */}
+                            <div className="input-group">
+                                <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Enter word to guess here" />
+                                <button onClick={randomWord} className="btn btn-primary" type="button" data-bs-dismiss="modal">Random</button>
+                            </div>
                         </form>
+                        <HowToPlay />
                     </div>
-                    <div className="modal-footer">
-                        <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button onClick={randomWord} className="btn btn-primary" data-bs-dismiss="modal">Random</button>
+                    <div className="modal-footer d-flex justify-content-between">
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value="" id="strict" checked={globalCtx?.strict} onChange={handleCheckboxStrict} />
+                            <label className="form-check-label" htmlFor="strict">
+                                Strict
+                            </label>
+                        </div>
+                        <div>
+                            <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            {/* <button onClick={randomWord} className="btn btn-primary ms-1" data-bs-dismiss="modal">Random</button> */}
+                        </div>
                     </div>
                 </div>
             </div>

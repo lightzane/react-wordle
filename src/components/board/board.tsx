@@ -23,6 +23,12 @@ export const Board: React.FC = () => {
     /** List of submitted letters for each round/tries */
     const submittedLetters = useMemo<string[]>(() => [], []); // added `useMemo` as per eslint-react warnings when being used inside `useEffect`
 
+    /** List of submitted words for later use on stats summary which contains green, yellow square emojis with the word */
+    const [submittedWords, setSubmittedWords] = useState<string[]>([]);
+
+    /** Same list as above but consists only of square emojis without the word */
+    const [statsOnly, setStatsOnly] = useState<string[]>([]);
+
     const [gameOver, setGameOver] = useState(false);
 
     const [winner, setWinner] = useState(false);
@@ -62,7 +68,9 @@ export const Board: React.FC = () => {
         const submittedAnswer = submittedLetters.join('');
 
         if (globalCtx?.strict && !WORDS.includes(submittedAnswer.toLowerCase())) {
-            alert('Word not in list!');
+            const toast = document.getElementById('toast-word-not-in-list');
+            // @ts-expect-error
+            new bootstrap.Toast(toast).show();
             return;
         }
 
@@ -71,23 +79,31 @@ export const Board: React.FC = () => {
         /** Can be used as indicator if all letters are correct */
         let correctLetters = 0;
 
+        let stats = '';
+
         currentWord.forEach((v, i) => {
             // * Correct Letter on Position
             if (submittedLetters[i] === v) {
                 boxRefs.current[i].classList.add('green');
                 correctLetters++;
+                stats += '🟩';
             }
 
             // * Letter exist but incorrect position
             else if (currentWord.includes(submittedLetters[i])) {
                 boxRefs.current[i].classList.add('yellow');
+                stats += '🟨';
             }
 
             // * Letter does not exist
             else {
                 boxRefs.current[i].classList.add('letter');
+                stats += '⬛';
             }
         });
+
+        setSubmittedWords((currentValue) => currentValue.concat(`${stats} ${submittedAnswer}`));
+        setStatsOnly((currentValue) => currentValue.concat(stats));
 
         // Clean up used boxes
         const usedBoxes = boxRefs.current.splice(0, currentWord.length);
@@ -147,6 +163,9 @@ export const Board: React.FC = () => {
     // * RESET
     useEffect(() => {
         if (!globalCtx?.gameRound) return;
+        // reset submitted words for stats
+        setSubmittedWords([]);
+        setStatsOnly([]);
         // reset winner
         setWinner(false);
         // reset attempts
@@ -168,24 +187,69 @@ export const Board: React.FC = () => {
     }, [globalCtx?.gameRound]);
 
     const success = () => (
-        <div className="alert alert-success">
+        <div className="alert alert-success d-flex justify-content-between align-items-center">
             🎉 Congratulations!
+            <div
+                className={`bi bi-card-text ${style.openstats}`}
+                data-bs-toggle="modal"
+                data-bs-target="#modalStats"
+            ></div>
         </div>
     );
 
     const reveal = () => (
-        <div className="alert alert-warning">
-            👌 Correct word: <b>{currentWord}</b>
+        <div className="alert alert-warning d-flex justify-content-between align-items-center">
+            <div>👌 Correct word: <b>{currentWord}</b></div>
+            <div
+                className={`bi bi-card-text ${style.openstats}`}
+                data-bs-toggle="modal"
+                data-bs-target="#modalStats"
+            ></div>
         </div>
     );
 
     return (
         <div className="container mt-3">
+
             {winner && success()}
             {!winner && gameOver && reveal()}
+
             <div className="d-flex flex-column align-items-center">
                 {list()}
             </div>
+
+            {/* Modal for Stats */}
+            <div className="modal" id="modalStats" tabIndex={-1}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        {/* <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel">Stats</h1>
+                        <button className="btn-close" data-bs-dismiss="modal"></button>
+                    </div> */}
+                        <div className={`modal-body ${style.stats}`}>
+                            <p>
+                                {
+                                    submittedWords.map((v, i) => (
+                                        <span key={i}>{v}</span>
+                                    ))
+                                }
+                            </p>
+                            <hr />
+                            <p className="mt-3">
+                                {
+                                    statsOnly.map((v, i) => (
+                                        <span key={i}>{v}</span>
+                                    ))
+                                }
+                            </p>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     );
 };

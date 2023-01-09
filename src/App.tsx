@@ -1,6 +1,7 @@
 import React, { KeyboardEvent, useCallback, useContext, useEffect, useState } from 'react';
 import './App.scss';
 import { Board } from './components/board/board';
+import { GameToast } from './components/game-toast';
 import { Header } from './components/header/header';
 import { Keyboard } from './components/keyboard';
 import { GlobalContext } from './state/global.context';
@@ -56,8 +57,12 @@ export const App: React.FC = () => {
 
   return (
     <div className="container">
+      <GameToast
+        id='toast-word-not-in-list'
+        className='text-bg-dark'
+        message='Word not in list'
+      />
       <Header isModalCustomWordOpened={handleModalCustomWordOpened} />
-      {/* <span className="font-space">{globalCtx?.currentWord?.replace(/./gi, '*')}</span> */}
       <Board />
       <Keyboard />
     </div>

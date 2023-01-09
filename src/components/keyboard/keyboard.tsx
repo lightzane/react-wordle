@@ -61,8 +61,8 @@ export const Keyboard: React.FC = () => {
     </>;
 
     const row3 = <>
-        <div className={style.key} onClick={() => triggerKey('BACKSPACE')}>
-            <i className='bi bi-backspace-fill'></i>
+        <div className={style.key + ' text-bg-primary'} onClick={() => triggerKey('ENTER')}>
+            <i className='bi bi-arrow-return-left'></i>
         </div>
         <div className={`${style.key} ${g?.includes('Z') && style.green} ${y?.includes('Z') && style.yellow} ${w?.includes('Z') && style.wrong}`} onClick={() => triggerKey('Z')}>Z</div>
         <div className={`${style.key} ${g?.includes('X') && style.green} ${y?.includes('X') && style.yellow} ${w?.includes('X') && style.wrong}`} onClick={() => triggerKey('X')}>X</div>
@@ -71,8 +71,8 @@ export const Keyboard: React.FC = () => {
         <div className={`${style.key} ${g?.includes('B') && style.green} ${y?.includes('B') && style.yellow} ${w?.includes('B') && style.wrong}`} onClick={() => triggerKey('B')}>B</div>
         <div className={`${style.key} ${g?.includes('N') && style.green} ${y?.includes('N') && style.yellow} ${w?.includes('N') && style.wrong}`} onClick={() => triggerKey('N')}>N</div>
         <div className={`${style.key} ${g?.includes('M') && style.green} ${y?.includes('M') && style.yellow} ${w?.includes('M') && style.wrong}`} onClick={() => triggerKey('M')}>M</div>
-        <div className={style.key} onClick={() => triggerKey('ENTER')}>
-            <i className='bi bi-arrow-return-left'></i>
+        <div className={style.key} onClick={() => triggerKey('BACKSPACE')}>
+            <i className='bi bi-backspace-fill'></i>
         </div>
     </>;
 

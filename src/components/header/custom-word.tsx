@@ -112,14 +112,14 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
         globalCtx?.setStrict(!globalCtx.strict);
     }
 
-    // Custom method to be called only once regardless of deps
+    // Custom method to be called only once regardless of deps (Initiate the game)
     useConstructor(() => {
         // Set Custom Word
         setTimeout(() => {
             globalCtx?.setCurrentWord(loadWord());
             globalCtx?.incrementGameRound();
             isModalCustomWordOpened(false);
-        }, 1);
+        }, 500);
     });
 
     // * ==============================================================
@@ -165,7 +165,7 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
                             </label>
                         </div>
                         <div>
-                            <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                             {/* <button onClick={randomWord} className="btn btn-primary ms-1" data-bs-dismiss="modal">Random</button> */}
                         </div>
                     </div>

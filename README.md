@@ -1,3 +1,9 @@
+# React Wordle
+
+Just a simple wordle game app to practice React app.
+
+This wordle game may have a few words but it can allow you to add your own custom word and let others guess it for you.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

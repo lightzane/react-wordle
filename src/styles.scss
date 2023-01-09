@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&family=Space+Mono&display=swap');
 
 body {
   margin: 0;
@@ -12,6 +12,10 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.wordle-font {
+  font-family: 'Source Code Pro', monospace;
 }
 
 // Also update the one in component/keyboard/keyboard.module.scss

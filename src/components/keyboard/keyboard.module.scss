@@ -30,8 +30,7 @@ $yellow: #fdcb6e;
 
 .keyboard_row {
     display: flex;
-    font-family: 'Space Mono', monospace;
-    font-weight: bold;
+    font-weight: 400;
 
     // handset
     @media screen and (max-width: 599.98px) and (orientation: portrait) {

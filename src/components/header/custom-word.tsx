@@ -112,6 +112,13 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
         globalCtx?.setStrict(!globalCtx.strict);
     }
 
+    const StrictCheckbox = <div className="form-check">
+        <input className="form-check-input" type="checkbox" value="" id="strict" checked={globalCtx?.strict} onChange={handleCheckboxStrict} />
+        <label className="form-check-label" htmlFor="strict">
+            Strict
+        </label>
+    </div>;
+
     // Custom method to be called only once regardless of deps (Initiate the game)
     useConstructor(() => {
         // Set Custom Word
@@ -147,23 +154,19 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
                         <button className="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div className="modal-body">
-                        <form className="form-floating" onSubmit={(event) => { submitWord(event); }}>
+                        <form className="form-floating mb-3" onSubmit={(event) => { submitWord(event); }}>
                             {/* <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Enter word here" maxLength={10} />
                             <label htmlFor="customWord">Enter word to guess here</label> */}
                             <div className="input-group">
-                                <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Enter word to guess here" />
-                                <button onClick={randomWord} className="btn btn-primary" type="button" data-bs-dismiss="modal">Random</button>
+                                <button onClick={randomWord} className="btn btn-primary" type="button" data-bs-dismiss="modal">Random Word</button>
+                                <input ref={inputCustomWord} type="text" className={`form-control ${style.uppercase}`} id="customWord" placeholder="Or Enter word to guess here" />
                             </div>
                         </form>
+                        {StrictCheckbox}
                         <HowToPlay />
                     </div>
                     <div className="modal-footer d-flex justify-content-between">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="strict" checked={globalCtx?.strict} onChange={handleCheckboxStrict} />
-                            <label className="form-check-label" htmlFor="strict">
-                                Strict
-                            </label>
-                        </div>
+                        {StrictCheckbox}
                         <div>
                             <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                             {/* <button onClick={randomWord} className="btn btn-primary ms-1" data-bs-dismiss="modal">Random</button> */}

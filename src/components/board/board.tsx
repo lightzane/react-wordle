@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { WORDS } from "../../shared/words";
+import { EXCEPTIONAL_WORDS, WORDS } from "../../shared";
 import { GlobalContext } from "../../state/global.context";
 import { Box } from "../box/box";
 import style from './board.module.scss';
@@ -67,7 +67,10 @@ export const Board: React.FC = () => {
 
         const submittedAnswer = submittedLetters.join('');
 
-        if (globalCtx?.strict && !WORDS.includes(submittedAnswer.toLowerCase())) {
+        const wordNotInList = !WORDS.includes(submittedAnswer.toLowerCase())
+            && !EXCEPTIONAL_WORDS.includes(submittedAnswer.toLowerCase());
+
+        if (globalCtx?.strict && wordNotInList) {
             const toast = document.getElementById('toast-word-not-in-list');
             // @ts-expect-error
             new bootstrap.Toast(toast).show();

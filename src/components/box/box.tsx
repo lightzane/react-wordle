@@ -8,7 +8,7 @@ interface Props {
 export const Box = forwardRef<HTMLDivElement, Props>(({ value }, ref) => {
     return <>
         <div className={`
-            ${style.box}
+            ${style.box} wordle-font
         `} ref={ref}>
             {value}
         </div>

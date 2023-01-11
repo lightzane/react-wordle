@@ -4,11 +4,14 @@ import { Board } from './components/board/board';
 import { GameToast } from './components/game-toast';
 import { Header } from './components/header/header';
 import { Keyboard } from './components/keyboard';
+import { GameOverProvider } from './state/game-over.context';
 import { GlobalContext } from './state/global.context';
 
 export const App: React.FC = () => {
 
   const globalCtx = useContext(GlobalContext);
+
+  const [triggerNextWord, setTriggerNextWord] = useState(0);
 
   const [isKeydownEnabled, setIsKeydownEnabled] = useState(false);
 
@@ -55,6 +58,10 @@ export const App: React.FC = () => {
     else { setIsKeydownEnabled(true); }
   }
 
+  function handlePlayNextWord(): void {
+    setTriggerNextWord(cv => cv + 1);
+  }
+
   return (
     <div className="container">
       <GameToast
@@ -62,8 +69,10 @@ export const App: React.FC = () => {
         className='text-bg-dark'
         message='Word not in list'
       />
-      <Header isModalCustomWordOpened={handleModalCustomWordOpened} />
-      <Board />
+      <GameOverProvider>
+        <Header triggerNextWord={triggerNextWord} isModalCustomWordOpened={handleModalCustomWordOpened} />
+        <Board handlePlayNextWord={handlePlayNextWord} />
+      </GameOverProvider>
       <Keyboard />
     </div>
   );

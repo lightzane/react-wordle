@@ -1,14 +1,21 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { EXCEPTIONAL_WORDS, WORDS } from "../../shared";
+import { GameOverContext } from "../../state/game-over.context";
 import { GlobalContext } from "../../state/global.context";
 import { Box } from "../box/box";
 import style from './board.module.scss';
 
-export const Board: React.FC = () => {
+interface Props {
+    handlePlayNextWord: () => void;
+}
+
+export const Board: React.FC<Props> = ({ handlePlayNextWord }) => {
 
     const TRIES = 6;
 
     const globalCtx = useContext(GlobalContext);
+
+    const gameOverCtx = useContext(GameOverContext);
 
     const currentWord = globalCtx?.currentWord?.split('');
 
@@ -28,8 +35,6 @@ export const Board: React.FC = () => {
 
     /** Same list as above but consists only of square emojis without the word */
     const [statsOnly, setStatsOnly] = useState<string[]>([]);
-
-    const [gameOver, setGameOver] = useState(false);
 
     const [winner, setWinner] = useState(false);
 
@@ -125,13 +130,13 @@ export const Board: React.FC = () => {
 
         // * Winner
         if (correctLetters >= currentWord.length) {
-            setGameOver(true);
+            gameOverCtx?.setIsGameOver(true);
             setWinner(true);
         }
 
         // * Lost
         else if (attempts === TRIES) {
-            setGameOver(true);
+            gameOverCtx?.setIsGameOver(true);
         }
 
         // * Continue playing... still have attempts
@@ -139,10 +144,10 @@ export const Board: React.FC = () => {
             setAttempts(currentValue => currentValue + 1);
         }
 
-    }, [currentWord, submittedLetters, attempts, globalCtx]);
+    }, [currentWord, submittedLetters, attempts, globalCtx, gameOverCtx]);
 
     useEffect(() => {
-        if (!currentWord?.length || gameOver) return;
+        if (!currentWord?.length || gameOverCtx?.isGameOver) return;
 
         const currentBox = globalCtx?.currentBox;
 
@@ -171,7 +176,7 @@ export const Board: React.FC = () => {
 
         }
 
-    }, [globalCtx, currentWord, submittedLetters, validateAnswer, gameOver]);
+    }, [globalCtx, currentWord, submittedLetters, validateAnswer, gameOverCtx?.isGameOver]);
 
     // * RESET
     useEffect(() => {
@@ -195,7 +200,7 @@ export const Board: React.FC = () => {
         globalCtx.setCurrentBox(0);
         globalCtx.enterLetter(null);
         // reset game
-        setGameOver(false);
+        gameOverCtx?.setIsGameOver(false);
         // reset letter containers for keyboard highlighting
         globalCtx.clearGreenLetters();
         globalCtx.clearYellowLetters();
@@ -215,13 +220,16 @@ export const Board: React.FC = () => {
     );
 
     const reveal = () => (
-        <div className="alert alert-warning d-flex justify-content-between align-items-center">
-            <div>👌 Correct word: <b>{currentWord}</b></div>
+        <div className="alert alert-secondary d-flex justify-content-between align-items-center">
             <div
-                className={`bi bi-card-text ${style.openstats}`}
+                className="btn btn-warning"
                 data-bs-toggle="modal"
                 data-bs-target="#modalStats"
-            ></div>
+            >See Correct Answer</div>
+            <div
+                className="btn btn-primary"
+                onClick={handlePlayNextWord}
+            >Play Next Word</div>
         </div>
     );
 
@@ -229,7 +237,7 @@ export const Board: React.FC = () => {
         <div className="container mt-3">
 
             {winner && success()}
-            {!winner && gameOver && reveal()}
+            {!winner && gameOverCtx?.isGameOver && reveal()}
 
             <div className="d-flex flex-column align-items-center">
                 {list()}
@@ -259,9 +267,12 @@ export const Board: React.FC = () => {
                                     ))
                                 }
                             </p>
+                            <hr />
+                            <p className="mt-3">Correct Word: <b>{currentWord}</b></p>
                         </div>
                         <div className="modal-footer">
                             <button className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                            <button className="btn btn-primary" data-bs-dismiss="modal" onClick={handlePlayNextWord}>Play Next Word</button>
                         </div>
                     </div>
                 </div>

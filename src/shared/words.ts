@@ -401,5 +401,6 @@ export const WORDS = [
     'spike',
     'poems',
     'glaze',
-    'flirt'
+    'flirt',
+    'camel'
 ];

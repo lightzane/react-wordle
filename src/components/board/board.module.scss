@@ -28,3 +28,13 @@
         }
     }
 }
+
+.delay {
+    opacity: 0%;
+    animation: anim-delay 1s ease-in 500ms forwards;
+}
+
+@keyframes anim-delay {
+    from { opacity:0% }
+    to { opacity: 100%; }
+}

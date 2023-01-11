@@ -1,11 +1,13 @@
 import React, { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
 import { WORDS } from "../../shared/words";
+import { GameOverContext } from "../../state/game-over.context";
 import { GlobalContext } from "../../state/global.context";
 import { HowToPlay } from "../how-to-play";
 import style from './header.module.scss';
 
 interface Props {
     isModalCustomWordOpened: (value: boolean) => void;
+    triggerNextWord: number;
 }
 
 /** Custom method to be called only once */
@@ -18,8 +20,11 @@ const useConstructor = (callBack = () => { }) => {
 
 let availableWords = [...WORDS];
 
-export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
+export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened, triggerNextWord }) => {
+
     const globalCtx = useContext(GlobalContext);
+
+    const gameOverCtx = useContext(GameOverContext);
 
     const inputCustomWord = useRef<HTMLInputElement>(null);
 
@@ -129,6 +134,20 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
         }, 500);
     });
 
+    useEffect(() => {
+        if (gameOverCtx?.isGameOver) {
+            // @ts-expect-error
+            new bootstrap.Modal('#modalPlayNextWord').show();
+        }
+    }, [gameOverCtx?.isGameOver]);
+
+    useEffect(() => {
+        if (triggerNextWord) {
+            randomWord();
+        }
+        // eslint-disable-next-line
+    }, [triggerNextWord]);
+
     // * ==============================================================
     return <>
 
@@ -146,6 +165,7 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
 
         </div>
 
+        {/* Modal for add custom word and how to play */}
         <div ref={modal} className="modal" id="modalAddCustomWord" tabIndex={-1}>
             <div className="modal-dialog">
                 <div className="modal-content">
@@ -171,6 +191,25 @@ export const CustomWord: React.FC<Props> = ({ isModalCustomWordOpened }) => {
                             <button ref={btnCancel} className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                             {/* <button onClick={randomWord} className="btn btn-primary ms-1" data-bs-dismiss="modal">Random</button> */}
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Modal for play next word */}
+        <div className="modal fade" id="modalPlayNextWord" tabIndex={-1}>
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    {/* <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel">Play with Custom Word</h1>
+                        <button className="btn-close" data-bs-dismiss="modal"></button>
+                    </div> */}
+                    <div className="modal-body">
+                        Play next word? (Available: <b>{availableWords.length}</b>)
+                    </div>
+                    <div className="modal-footer">
+                        <button className="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button onClick={randomWord} className="btn btn-primary" data-bs-dismiss="modal">Next Word</button>
                     </div>
                 </div>
             </div>

@@ -77,7 +77,7 @@ export const Keyboard: React.FC = () => {
     </>;
 
     return (
-        <div className='container d-flex align-items-center flex-column mt-3'>
+        <div className='container d-flex align-items-center flex-column mt-1'>
             <div className={`wordle-font ${style.keyboard_row}`}>{row1}</div>
             <div className={`wordle-font ${style.keyboard_row}`}>{row2}</div>
             <div className={`wordle-font ${style.keyboard_row}`}>{row3}</div>

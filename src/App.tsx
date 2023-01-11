@@ -73,6 +73,7 @@ export const App: React.FC = () => {
         <Header triggerNextWord={triggerNextWord} isModalCustomWordOpened={handleModalCustomWordOpened} />
         <Board handlePlayNextWord={handlePlayNextWord} />
       </GameOverProvider>
+      <p className='lightzane m-0 mt-1'>LIGHTZANE 2023</p>
       <Keyboard />
     </div>
   );

@@ -36,4 +36,11 @@ $yellow: #fdcb6e;
     @media screen and (max-width: 599.98px) and (orientation: portrait) {
         font-size: 0.8rem;
     }
+
+    // smaller
+    @media screen and (max-width: 320.98px) and (orientation: portrait) {
+        .key {
+            padding: .35rem .55rem;
+        }
+    }
 }
